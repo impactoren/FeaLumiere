@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Deteksi Risiko Hipertensi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #f9d6e8, #fce9f3);
+      overflow-y: auto;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px 10px 40px;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px 25px 40px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+      position: relative;
+      z-index: 10;
+      /* batas tinggi maksimal, supaya di mobile bisa scroll container */
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      color: #d43f7f;
+      margin-bottom: 6px;
+      font-size: 26px;
+      font-weight: 600;
+    }
+    h2 {
+      color: #b86a99;
+      font-weight: 500;
+      margin: 0 0 18px 0;
+    }
+    .subtitle {
+      color: #9b5c76;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      margin: 15px 0 6px 0;
+      color: #b95e8b;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid #f7a1c1;
+      border-radius: 12px;
+      font-size: 15px;
+      outline-color: #d43f7f;
+      transition: border-color 0.3s ease;
+    }
+    input[type="number"]:focus {
+      border-color: #d43f7f;
+    }
+    button {
+      background: linear-gradient(90deg, #f783ac, #fbb1bd);
+      color: white;
+      border: none;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 15px 0 8px 0;
+      width: 100%;
+      font-size: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(248, 150, 172, 0.4);
+    }
+    #hasil {
+      margin-top: 20px;
+      font-weight: 700;
+      color: #b93d7c;
+      font-size: 18px;
+      min-height: 24px;
+    }
+    /* Animasi Lottie tengah dan responsif */
+    lottie-player {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 20px auto;
+      display: block;
+    }
+    /* Responsive untuk layar kecil */
+    @media (max-width: 400px) {
+      .container {
+        padding: 20px 15px 30px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      h2 {
+        font-size: 18px;
+      }
+      lottie-player {
+        width: 110px;
+        height: 110px;
+        margin-bottom: 15px;
+      }
+      button {
+        font-size: 14px;
+        padding: 12px 20px;
+      }
+    }
+  </style>
+</head>
+<body onload="cekLogin()">
+  <div class="container">
+    <!-- Animasi Lottie lucu -->
+    <lottie-player 
+      src="https://assets2.lottiefiles.com/packages/lf20_touohxv0.json" 
+      background="transparent" 
+      speed="1" 
+      loop 
+      autoplay>
+    </lottie-player>
+
+    <h1>Deteksi Dini Risiko Hipertensi</h1>
+    <h2>Halo, <span id="namaUser"></span>!</h2>
+    <p class="subtitle">Isi data berikut untuk mengetahui risiko hipertensi Anda.</p>
+
+    <div class="form-section">
+      <label for="usia">Usia (tahun):</label>
+      <input type="number" id="usia" min="0" required />
+
+      <label for="berat">Berat Badan (kg):</label>
+      <input type="number" id="berat" min="0" step="0.1" required />
+
+      <label for="sistolik">Tekanan Sistolik (mmHg):</label>
+      <input type="number" id="sistolik" min="0" required />
+
+      <label for="diastolik">Tekanan Diastolik (mmHg):</label>
+      <input type="number" id="diastolik" min="0" required />
+
+      <button onclick="deteksi()">Mulai Deteksi Risiko</button>
+      <button onclick="cetakHasil()" id="btn-cetak" style="display:none;">Cetak Hasil ke PDF</button>
+      <button onclick="kembaliKeMenu()">Kembali ke Menu</button>
+    </div>
+
+    <div id="hasil"></div>
+  </div>
+
+  
+  <script>
+    function cekLogin() {
+      if (localStorage.getItem("login") !== "true") {
+        window.location.href = "index.html";
+      } else {
+        const nama = localStorage.getItem("nama") || "Pengguna";
+        document.getElementById("namaUser").innerText = nama;
+      }
+    }
+
+    function kembaliKeMenu() {
+      window.location.href = "beranda.html";
+    }
+
+    function deteksi() {
+      const usia = parseInt(document.getElementById("usia").value);
+      const berat = parseFloat(document.getElementById("berat").value);
+      const sistolik = parseInt(document.getElementById("sistolik").value);
+      const diastolik = parseInt(document.getElementById("diastolik").value);
+
+      if (isNaN(usia) || isNaN(berat) || isNaN(sistolik) || isNaN(diastolik)) {
+        alert("Mohon isi semua data dengan benar.");
+        return;
+      }
+
+      let risiko = "Rendah";
+
+      if (sistolik >= 180 || diastolik >= 120) {
+        risiko = "Sangat Tinggi (Krisis Hipertensi)";
+      } else if (sistolik >= 160 || diastolik >= 100) {
+        risiko = "Tinggi";
+      } else if (sistolik >= 140 || diastolik >= 90) {
+        risiko = "Sedang";
+      }
+
+      const hasil = `Risiko Hipertensi: ${risiko}`;
+      document.getElementById("hasil").innerText = hasil;
+
+      localStorage.setItem("hasilDeteksi", hasil);
+      localStorage.setItem("dataInput", JSON.stringify({ usia, berat, sistolik, diastolik }));
+
+      document.getElementById("btn-cetak").style.display = "inline-block";
+    }
+
+    function cetakHasil() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const nama = localStorage.getItem("nama") || "Pengguna";
+      const hasil = localStorage.getItem("hasilDeteksi") || "Tidak ada hasil";
+      const data = JSON.parse(localStorage.getItem("dataInput") || "{}");
+
+      doc.setFontSize(16);
+      doc.text("Laporan Deteksi Risiko Hipertensi", 20, 20);
+
+      doc.setFontSize(12);
+      doc.text(`Nama: ${nama}`, 20, 30);
+      doc.text(`Usia: ${data.usia} tahun`, 20, 40);
+      doc.text(`Berat Badan: ${data.berat} kg`, 20, 50);
+      doc.text(`Tekanan Darah: ${data.sistolik} / ${data.diastolik} mmHg`, 20, 60);
+      doc.setFontSize(14);
+      doc.text(`${hasil}`, 20, 80);
+
+      doc.save("hasil_deteksi_hipertensi.pdf");
+    }
+  </script>
+</body>
+</html>

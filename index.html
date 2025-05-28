@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Masuk Sistem Deteksi Hipertensi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffe6f0, #fff0f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(255, 105, 180, 0.2);
+      animation: fadeIn 1s ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #e83e8c;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #9e4c6c;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #d6336c;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #f8d7da;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      background-color: #fff0f5;
+    }
+
+    input[type="text"]:focus {
+      border-color: #e83e8c;
+      background-color: #fff;
+      outline: none;
+    }
+
+    input[type="text"]:hover {
+      box-shadow: 0 0 10px rgba(232, 62, 140, 0.3);
+    }
+
+    button {
+      background: linear-gradient(to right, #f783ac, #fbb1bd);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(248, 150, 172, 0.4);
+    }
+
+    lottie-player {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 20px;
+      display: block;
+    }
+
+    /* Emoji pojok */
+    .emoji-top-left,
+    .emoji-top-right {
+      position: absolute;
+      font-size: 28px;
+      z-index: 0;
+    }
+
+    .emoji-top-left {
+      top: 30px;
+      left: 30px;
+    }
+
+    .emoji-top-right {
+      top: 30px;
+      right: 30px;
+    }
+
+    /* Efek emoji hati melayang */
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      color: #e83e8c;
+      animation: floatUp 4s infinite ease-in;
+      opacity: 0.6;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100px) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Emoji di pojok atas -->
+  <div class="emoji-top-left">💓</div>
+  <div class="emoji-top-right">🩺</div>
+
+  <!-- Emoji hati melayang -->
+  <span class="heart" style="left: 20%; top: 90%;">💗</span>
+  <span class="heart" style="left: 60%; top: 95%;">💞</span>
+  <span class="heart" style="left: 80%; top: 92%;">💓</span>
+
+  <!-- Kontainer utama -->
+  <div class="container">
+    <!-- Animasi Lottie utama -->
+    <lottie-player
+      src="https://assets10.lottiefiles.com/packages/lf20_ydo1amjm.json"
+      background="transparent"
+      speed="1"
+      loop
+      autoplay>
+    </lottie-player>
+
+    <h2>Selamat Datang di Féa Lumière
+    Sistem Deteksi Dini Hipertensi</h2>
+
+      <p class="subtitle">
+      Sistem ini menggunakan kombinasi <strong>Sistem Pakar</strong> dan <strong>Logika Fuzzy</strong> 
+      untuk membantu mendeteksi risiko hipertensi sejak dini.
+      Masukkan nama Anda untuk memulai sesi konsultasi kesehatan digital!
+    </p>
+
+    <label for="username">Nama Anda:</label>
+    <input type="text" id="username" placeholder="Contoh: En'gy, Fitria, Asfa, dll" />
+
+    <button onclick="masuk()">Mulai Konsultasi</button>
+  </div>
+
+
+  <script>
+    function masuk() {
+      const nama = document.getElementById("username").value.trim();
+      if (nama === "") {
+        alert("Nama tidak boleh kosong ya~");
+        return;
+      }
+      localStorage.setItem("login", "true");
+      localStorage.setItem("nama", nama);
+      window.location.href = "beranda.html";
+    }
+  </script>
+</body>
+</html>

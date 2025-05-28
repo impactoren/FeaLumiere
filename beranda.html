@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Menu Utama - Sistem Deteksi Hipertensi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffe6f0, #fff0f5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(255, 105, 180, 0.2);
+      animation: fadeIn 1s ease-in-out;
+      z-index: 10;
+      position: relative;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #e83e8c;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #9e4c6c;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: linear-gradient(to right, #f783ac, #fbb1bd);
+      color: white;
+      border: none;
+      padding: 14px 26px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(248, 150, 172, 0.4);
+    }
+
+    lottie-player.center-animation {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 20px;
+      display: block;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Emoji pojok */
+    .emoji-top-left,
+    .emoji-top-right {
+      position: absolute;
+      font-size: 28px;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .emoji-top-left {
+      top: 30px;
+      left: 30px;
+    }
+
+    .emoji-top-right {
+      top: 30px;
+      right: 30px;
+    }
+
+    /* Efek emoji hati melayang */
+    .heart {
+      position: absolute;
+      font-size: 18px;
+      color: #e83e8c;
+      animation: floatUp 4s infinite ease-in;
+      opacity: 0.6;
+      z-index: 5;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-100px) scale(1.2);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body onload="cekLogin()">
+
+  <!-- Emoji pojok atas -->
+  <div class="emoji-top-left">💓</div>
+  <div class="emoji-top-right">🩺</div>
+
+  <!-- Emoji hati melayang -->
+  <span class="heart" style="left: 25%; top: 90%;">💞</span>
+  <span class="heart" style="left: 55%; top: 95%;">💗</span>
+  <span class="heart" style="left: 80%; top: 92%;">💓</span>
+
+  <!-- Konten utama -->
+  <div class="container">
+    <!-- ANIMASI LOTTIE TENGAH -->
+    <img src="domba.jpg" style="width:160px; height:160px; margin:0 auto 20px; display:block;">
+
+    <h1>Halo, <span id="namaUser"></span>!</h1>
+    <p class="subtitle">Yuk, cek kondisi kesehatanmu hari ini. Pilih salah satu fitur berikut untuk memulai.</p>
+
+    <button onclick="window.location.href='deteksi.html'">🩺 Deteksi Risiko Hipertensi</button>
+    <button onclick="window.location.href='tips.html'">💡 Tips Kesehatan</button>
+    <button onclick="logout()">🚪 Keluar</button>
+  </div>
+
+  <script>
+    function cekLogin() {
+      if (localStorage.getItem("login") !== "true") {
+        window.location.href = "index.html";
+      } else {
+        const nama = localStorage.getItem("nama");
+        document.getElementById("namaUser").innerText = nama;
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("login");
+      localStorage.removeItem("nama");
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
